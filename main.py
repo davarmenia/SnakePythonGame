@@ -12,15 +12,24 @@ LINES_DIST = 25
 FPS = 60
 
 # Parameters for player
-SNAKE_SIZE = 23
+SNAKE_SIZE = 25
 ani = 4
 GAME_STARTED = False
 GAME_OVER = False
 MOVMENT_BUSY = False
 
 # Colors in game
+TABLE_COLOR_1 = (126,161,119)
+TABLE_COLOR_2 = (146,184,135)
+
+SNKAE_COLOR_1 = (50,50,50)
+SNKAE_COLOR_H = (75,75,75)
+
+FRUIT_COLOR = (225,5,25)
+
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
+SKY_BLUE = (51, 153, 255)
 GREEN = (0, 255, 0)
 GRAY = (81, 81, 81)
 SCORE_COLOR = (255, 0, 127)
@@ -63,7 +72,10 @@ class Fruit():
             fruit.update()
 
     def draw(self):
-        pygame.draw.circle(screen, GREEN, (self.coordinates[0] * (SNAKE_SIZE + 2) + (SNAKE_SIZE + 2)/2 + 1, self.coordinates[1] * (SNAKE_SIZE + 2) + (SNAKE_SIZE + 2)/2 + 1), 7)    
+        pygame.draw.rect(screen, FRUIT_COLOR, (self.coordinates[0] * SNAKE_SIZE, self.coordinates[1] *  SNAKE_SIZE, SNAKE_SIZE, SNAKE_SIZE))
+        pygame.draw.rect(screen, TABLE_COLOR_1, (self.coordinates[0] * SNAKE_SIZE + 1, self.coordinates[1] *  SNAKE_SIZE + 1, SNAKE_SIZE - 2, SNAKE_SIZE - 2))
+        pygame.draw.rect(screen, FRUIT_COLOR, (self.coordinates[0] * SNAKE_SIZE + 3, self.coordinates[1] *  SNAKE_SIZE + 3, SNAKE_SIZE - 6, SNAKE_SIZE - 6))
+        
 
 class Player():
     def __init__(self):
@@ -94,7 +106,14 @@ class Player():
         if GAME_STARTED:
             self.check_collision(fruit.coordinates)
         for coordinates in self.points_coordinates:
-            pygame.draw.rect(screen, BLUE, (coordinates[0] * (SNAKE_SIZE + 2) + 1, coordinates[1] * (SNAKE_SIZE + 2) + 1, SNAKE_SIZE, SNAKE_SIZE))
+            if coordinates == self.points_coordinates[0]:
+                pygame.draw.rect(screen, SNKAE_COLOR_H, (coordinates[0] * SNAKE_SIZE, coordinates[1] * SNAKE_SIZE, SNAKE_SIZE, SNAKE_SIZE))
+                pygame.draw.rect(screen, TABLE_COLOR_1, (coordinates[0] * SNAKE_SIZE + 1, coordinates[1] * SNAKE_SIZE + 1, SNAKE_SIZE - 2, SNAKE_SIZE - 2))
+                pygame.draw.rect(screen, SNKAE_COLOR_H, (coordinates[0] * SNAKE_SIZE + 3, coordinates[1] * SNAKE_SIZE + 3, SNAKE_SIZE - 6, SNAKE_SIZE - 6))
+            else:
+                pygame.draw.rect(screen, SNKAE_COLOR_1, (coordinates[0] * SNAKE_SIZE, coordinates[1] * SNAKE_SIZE, SNAKE_SIZE, SNAKE_SIZE))
+                pygame.draw.rect(screen, TABLE_COLOR_1, (coordinates[0] * SNAKE_SIZE + 1, coordinates[1] * SNAKE_SIZE + 1, SNAKE_SIZE - 2, SNAKE_SIZE - 2))
+                pygame.draw.rect(screen, SNKAE_COLOR_1, (coordinates[0] * SNAKE_SIZE + 3, coordinates[1] * SNAKE_SIZE + 3, SNAKE_SIZE - 6, SNAKE_SIZE - 6))
         if GAME_OVER:
             return
         self.frame += self.speed
@@ -178,11 +197,13 @@ while running:
     screen.fill(BLACK)
 
     # Draw a solid blue circle in the center
-    for pos_row in range(20) :
-        pygame.draw.line(screen, GRAY, (0, (pos_row + 1) * LINES_DIST), (WIN_W, (pos_row + 1) * LINES_DIST), 1)
-    for pos_colum in range(19) :
-        pygame.draw.line(screen, GRAY, ((pos_colum + 1) * LINES_DIST, 0), ((pos_colum + 1) * LINES_DIST, WIN_H - 20), 1)
-        
+    for pos_row in range(20) : 
+        for pos_colum in range(20) :
+            pygame.draw.rect(screen, TABLE_COLOR_2, ( pos_colum * 25,  pos_row * 25, 25, 25))
+            pygame.draw.rect(screen, TABLE_COLOR_1, ( pos_colum * 25 + 1, pos_row * 25 + 1, 23, 23))
+            pygame.draw.rect(screen, TABLE_COLOR_2, ( pos_colum * 25 + 3,  pos_row * 25 + 3, 19, 19))
+    
+    
     pygame.time.get_ticks()
 
     # Flip the display
