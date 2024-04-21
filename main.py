@@ -207,11 +207,11 @@ while running:
     pygame.time.get_ticks()
 
     # Flip the display
-    if GAME_OVER:
-            info_text.draw_game_over()
+    fruit.draw()
     player.draw()
     fruit.draw()
-    fruit.draw()
+    if GAME_OVER:
+            info_text.draw_game_over()
     info_text.draw_score()
     GAME_CLOCK.tick(FPS)
     pygame.display.update()
